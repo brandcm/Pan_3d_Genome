@@ -1,0 +1,175 @@
+fastqc_path = 'fastqc'
+htseq_path = 'htseq'
+multiqc_path = 'multiqc'
+samtools_path = 'samtools'
+star_path = 'STAR'
+trimmomatic_path = 'trimmomatic'
+
+samples = ['SRR306811', 'SRR306817', 'SRR306818', 'SRR306819', 'SRR306820', 'SRR306821', 'SRR306822', 'SRR306823', 'SRR306824', 'SRR306825', 'SRR306827', 'SRR306828', 'SRR306829', 'SRR306830', 'SRR306831', 'SRR306832', 'SRR306833', 'SRR306834', 'SRR306835', 'SRR306836', 'SRR306837']
+
+fastq = 'fastq/{sample}.fastq.gz'
+fastqc_results = 'fastqc_results/{sample}_fastqc.html'
+multiqc_results = 'multiqc_results/multiqc_report.html'
+
+trimmed_fastq = 'trimmed_fastq/trimmed_{sample}.fastq.gz'
+trimmed_fastqc_results = 'trimmed_fastqc_results/trimmed_{sample}_fastqc.html'
+trimmed_multiqc_results = 'trimmed_multiqc_results/trimmed_multiqc_report.html'
+
+reference_directory = 'reference'
+bams = 'bams/{sample}.bam'
+bam_indices = 'bams/{sample}.bam.bai'
+counts = 'read_counts/{sample}_read_counts.txt'
+
+# Rules
+rule all:
+	input:
+		multiqc_results,
+		expand(bam_indices, sample=samples),
+		expand(counts, sample=samples)
+
+rule fastqc_analysis:
+	input:
+		fastq
+	output:
+		fastqc_results
+	params:
+		fastqc = fastqc_path,
+		threads = 1,
+		mem = 40,
+		time = "2:00:00"
+	shell:
+		"{params.fastqc} -o fastqc_results {input}"
+
+rule multiqc_analysis:
+	input:
+		expand(fastqc_results, sample=samples)
+	output:
+		multiqc_results
+	params:
+		multiqc = multiqc_path,
+		threads = 1,
+		mem = 40,
+		time = "2:00:00"
+	shell:
+		"export LC_ALL=en_US.UTF-8 && export LANG=en_US.UTF-8 && "
+		"{params.multiqc} --interactive -f "
+		"-o multiqc_results fastqc_results"
+
+rule trim_adapters_and_reads:
+	input:
+		fastq
+	output:
+		trimmed_fastq
+	params:
+		trimmomatic = trimmomatic_path,
+		threads = 1,
+		mem = 40,
+		time = "2:00:00"
+	shell:
+		"{params.trimmomatic} SE -phred33 {input} {output} ILLUMINACLIP:adapters.fa:2:30:10 HEADCROP:1 CROP:58"
+
+rule trimmed_fastqc_analysis:
+	input:
+		trimmed_fastq
+	output:
+		trimmed_fastqc_results
+	params:
+		fastqc = fastqc_path,
+		threads = 1,
+		mem = 40,
+		time = "2:00:00"
+	shell:
+		"{params.fastqc} -o trimmed_fastqc_results {input}"
+		
+rule trimmed_multiqc_analysis:
+	input:
+		expand(trimmed_fastqc_results, sample=samples)
+	output:
+		trimmed_multiqc_results
+	params:
+		multiqc = multiqc_path,
+		threads = 1,
+		mem = 40,
+		time = "2:00:00"
+	shell:
+		"export LC_ALL=en_US.UTF-8 && export LANG=en_US.UTF-8 && "
+		"{params.multiqc} --interactive -f "
+		"-o trimmed_multiqc_results trimmed_fastqc_results"
+
+rule prepare_reference:
+	input:
+		fasta = "../reference_fasta/panTro6.fa",
+		gff = "reference/panTro6_with_chr_IDs.gff",
+		ref = reference_directory
+	output:
+		"reference/chrLength.txt",
+		"reference/chrNameLength.txt",
+		"reference/chrName.txt",
+		"reference/chrStart.txt",
+		"reference/exonGeTrInfo.tab",
+		"reference/exonInfo.tab",
+		"reference/geneInfo.tab",
+		"reference/Genome",
+		"reference/genomeParameters.txt",
+		"reference/SA",
+		"reference/SAindex",
+		"reference/sjdbInfo.txt",
+		"reference/sjdbList.fromGTF.out.tab",
+		"reference/sjdbList.out.tab",
+		"reference/transcriptInfo.tab"
+	params:
+		star = star_path,
+		threads = 1,
+		mem = 60,
+		time = "6:00:00"
+	shell:
+		"{params.star} --runMode genomeGenerate --genomeDir {input.ref} "
+		"--genomeFastaFiles {input.fasta} "
+		"--sjdbGTFfile {input.gff} --sjdbGTFtagExonParentTranscript Parent "
+		"--sjdbOverhang 57 --outFileNamePrefix {output}"
+		
+rule map_reads:
+	input:
+		"reference/genomeParameters.txt",
+		fastq = trimmed_fastq,
+		ref = reference_directory
+	output:
+		bams
+	params:
+		star = star_path,
+		threads = 1,
+		mem = 60,
+		time = "3:00:00"
+	shell:
+		"{params.star} --genomeDir {input.ref} "
+		"--readFilesIn {input.fastq} --readFilesCommand zcat --runThreadN 8 "
+		"--outSAMtype BAM SortedByCoordinate --outFileNamePrefix bams/{wildcards.sample}_ && "
+		"mv bams/{wildcards.sample}_Aligned.sortedByCoord.out.bam bams/{wildcards.sample}.bam"
+
+rule index_sorted_bam:
+	input:
+		bams
+	output:
+		bam_indices
+	params:
+		samtools = samtools_path,
+		threads = 1,
+		mem = 20,
+		time = "2:00:00"
+	shell:
+		"{params.samtools} index {input}"
+
+rule count_reads:
+	input:
+		bam = bams,
+		gtf = "reference/panTro6_with_chr_IDs.gtf",
+		index = bam_indices
+	output:
+		counts
+	params:
+		htseq = htseq_path,
+		threads = 1,
+		mem = 20,
+		time = "6:00:00"
+	shell:
+		"{params.htseq}-count --format=bam --stranded=no {input.bam} {input.gtf} > {output}"

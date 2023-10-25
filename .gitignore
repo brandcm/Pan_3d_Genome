@@ -1,1 +1,3 @@
 .DS_Store
+data/phenotype_enrichment/empiric_counts/
+data/phenotype_enrichment/empiric_FDR/
