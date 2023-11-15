@@ -5,11 +5,9 @@ import pandas as pd
 def parse_args():
 	parser = argparse.ArgumentParser()
 		
-	parser.add_argument(
-		"--ontology", type=str, required=True, help="Name of ontology")
+	parser.add_argument('--ontology', type = str, required = True, help = 'Name of ontology')
 	
-	parser.add_argument(
-		"--set_name", type=str, required=True, help="Name of gene set")
+	parser.add_argument('--set_name', type = str, required = True, help = 'Name of gene set')
 
 	return parser.parse_args()
 

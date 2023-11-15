@@ -1,6 +1,6 @@
 This directory contains a subdirectory and scripts to generate 3d maps from FASTAs using Akita and compare the resulting contact maps. Scripts are described and listed below in the order they should be run.
 
-- the basenji subdirectory contains scripts to run Akita.
+- basenji/ contains scripts to run Akita.
 
 - akita_prediction_reference.py generates 3d predictions per chromosome for the reference sequence, panTro6, using Akita. This script has six arguments:<br>
 	>--windows, the path to windows file, formatted as a tab-separated two column file with the first column indicating the chromosome and the second column a comma-delimited list of 0-based window start coordinates<br><br>

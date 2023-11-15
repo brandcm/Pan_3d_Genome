@@ -1,0 +1,8 @@
+Building DAG of jobs...
+MissingInputException in rule prepare_reference in file /Users/cbrand/Desktop/research/projects/current_projects/pan_3d_genome/GitHub/data/RNAseq/Snakefile, line 99:
+Missing input files for rule prepare_reference:
+    output: reference/chrLength.txt, reference/chrNameLength.txt, reference/chrName.txt, reference/chrStart.txt, reference/exonGeTrInfo.tab, reference/exonInfo.tab, reference/geneInfo.tab, reference/Genome, reference/genomeParameters.txt, reference/SA, reference/SAindex, reference/sjdbInfo.txt, reference/sjdbList.fromGTF.out.tab, reference/sjdbList.out.tab, reference/transcriptInfo.tab
+    affected files:
+        ../reference_fasta/panTro6.fa
+        reference
+        reference/panTro6_with_chr_IDs.gff

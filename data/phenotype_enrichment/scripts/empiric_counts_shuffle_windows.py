@@ -6,20 +6,15 @@ import pybedtools
 def parse_args():
 	parser = argparse.ArgumentParser()
 
-	parser.add_argument(
-		"--iterations", type=int, required=True, default=1000, help="Number of observations to generate")
+	parser.add_argument('--iterations', type = int, required = True, default = 1000, help = 'Number of observations to generate')
 	
-	parser.add_argument(
-		"--ontology", type=str, required=True, help="Name of ontology")
+	parser.add_argument('--ontology', type = str, required = True, help = 'Name of ontology')
 	
-	parser.add_argument(
-		"--set_name", type=str, required=True, help="Name of variant set being considered")
+	parser.add_argument('--set_name', type = str, required = True, help = 'Name of variant set being considered')
 		
-	parser.add_argument(
-		"--array_id", type=int, required=True, default=0, help="Array ID to use if parallelizing")
+	parser.add_argument('--array_id', type = int, required = True, default = 0, help = 'Array ID to use if parallelizing')
 					
 	args = parser.parse_args()
-	
 	return args
 
 # other input files

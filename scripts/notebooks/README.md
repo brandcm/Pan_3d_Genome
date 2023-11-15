@@ -1,6 +1,6 @@
 This directory contains notebooks to compile, analyze, and visualize results. Notebooks are described and listed below in the order they should be run.
 
-- the basenji subdirectory contains scripts to run Akita and is required by visualize_maps notebooks.
+- basenji/ contains scripts to run Akita and is required by visualize_maps notebooks.
 
 - generate_dataframes.ipynb compiles and filters pairwise comparisons for use in the other notebooks in this directory.
 

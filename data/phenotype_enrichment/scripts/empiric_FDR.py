@@ -5,17 +5,13 @@ import pandas as pd
 def parse_args():
 	parser = argparse.ArgumentParser()
 	
-	parser.add_argument(
-		"--ontology", type=str, required=True, help="Name of ontology")
+	parser.add_argument('--ontology', type = str, required = True, help = 'Name of ontology')
 
-	parser.add_argument(
-		"--set_name", type=str, required=True, help="Name of gene set")
+	parser.add_argument('--set_name', type = str, required = True, help = 'Name of gene set')
 		
-	parser.add_argument(
-		"--subset_size", type=int, help="Number of empiric counts to consider when calculating FDR")
+	parser.add_argument('--subset_size', type = int, help = 'Number of empiric counts to consider when calculating FDR')
 		
 	args = parser.parse_args()
-	
 	return args
 
 def main():

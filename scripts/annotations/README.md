@@ -10,6 +10,8 @@ This directory contains scripts to retrieve annotation data for this project. As
 
 - retrieve_panTro6_phastCons_elements.sh downloads, reformats, and converts coordinates for phastCons conserved elements called in a 30-way vertebrate multiple species alignment. The resulting output files should be placed in the data/annotations folder.
 
+&nbsp;
+
 Chain Files:
 - hg38 to panTro6 ([download here](https://hgdownload.soe.ucsc.edu/goldenPath/hg38/liftOver/))
 

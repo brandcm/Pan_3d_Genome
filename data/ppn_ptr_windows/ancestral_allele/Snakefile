@@ -1,0 +1,43 @@
+# files
+indexed_FASTA = 'data/homo_sapiens_ancestor_GRCh38.fa.gz.gzi'
+FASTA = 'data/homo_sapiens_ancestor_GRCh38.fa.gz'
+renamed_sequences = 'data/rename_ancestral_GRCh38_seqs.txt'
+variants = 'data/ppn_ptr_divergent_window_3d_modifying_variants.bed'
+
+# variables
+Ensembl_release = '110'
+
+# rules
+rule all:
+    input:
+        indexed_FASTA,
+        'data/ppn_ptr_divergent_window_3d_modifying_variants_ancestral_allele.txt'
+
+rule download_and_rehead_FASTA:
+    input:
+        renamed_sequences
+    output:
+        FASTA,
+        indexed_FASTA
+    params:
+        release_number = Ensembl_release
+    shell:
+        "bash scripts/download_and_rehead_FASTA.sh {params.release_number}"
+
+rule get_ancestral_alleles:
+    input:
+        FASTA,
+        variants
+    output:
+        hg38_variants = temp('data/ppn_ptr_divergent_window_3d_modifying_variants_hg38.bed'),
+        hg38_variants_ancestral_allele = temp('data/ppn_ptr_divergent_window_3d_modifying_variants_hg38_ancestral_allele.tmp'),
+        panTro6_variants_ancestral_allele = temp('data/ppn_ptr_divergent_window_3d_modifying_variants_ancestral_allele.tmp'),
+        panTro6_variants_ancestral_allele_text = temp('data/unsorted_ppn_ptr_divergent_window_3d_modifying_variants_ancestral_allele.tmp'),
+        sorted_panTro6_variants_ancestral_allele_text = 'data/ppn_ptr_divergent_window_3d_modifying_variants_ancestral_allele.txt'
+    run:
+        shell("mkdir -p unlifted")
+        shell("./liftover {variants} chain_files/panTro6ToHg38.over.chain.gz {output.hg38_variants} unlifted/unlifted_ppn_ptr_divergent_window_3d_modifying_variants.bed")
+        shell("python3 scripts/ancestral_allele_to_BED.py --fasta {FASTA} --bed {output.hg38_variants} --output {output.hg38_variants_ancestral_allele}")
+        shell("./liftover {output.hg38_variants_ancestral_allele} chain_files/hg38ToPanTro6.over.chain.gz {output.panTro6_variants_ancestral_allele} unlifted/unlifted_ppn_ptr_divergent_window_3d_modifying_variants_hg38.bed")
+        shell("awk '{{print $1,$3,$4}}' OFS='\t' {output.panTro6_variants_ancestral_allele} > {output.panTro6_variants_ancestral_allele_text}")
+        shell("sort -k1,1 -k2n,2 {output.panTro6_variants_ancestral_allele_text} > {output.sorted_panTro6_variants_ancestral_allele_text}")

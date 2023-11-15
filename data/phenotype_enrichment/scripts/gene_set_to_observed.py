@@ -3,11 +3,11 @@ import argparse
 def parse_args():
 	parser = argparse.ArgumentParser()
 
-	parser.add_argument("--genes", type=str, required=True, help="Name of genes files in data directory")	
+	parser.add_argument('--genes', type = str, required = True, help = 'Name of genes file in data directory')	
 
-	parser.add_argument("--ontology", type=str, required=True, help="Name of ontology")
+	parser.add_argument('--ontology', type = str, required = True, help = 'Name of ontology')
 	
-	parser.add_argument("--set_name", type=str, required=True, help="Name of gene set")
+	parser.add_argument('--set_name', type = str, required = True, help = 'Name of gene set')
 
 	return parser.parse_args()
 

@@ -3,11 +3,10 @@
 #$ -M colin.brand@ucsf.edu
 #$ -m ae
 #$ -cwd
-#$ -o /wynton/group/capra/projects/pan_3d_genome/data/phenotype_enrichment_2/ppn_ptr_divergent_windows_phenotype_enrichment_pipeline.out
-#$ -e /wynton/group/capra/projects/pan_3d_genome/data/phenotype_enrichment_2/ppn_ptr_divergent_windows_phenotype_enrichment_pipeline.err
+#$ -o /wynton/group/capra/projects/pan_3d_genome/data/phenotype_enrichment/ppn_ptr_divergent_windows_phenotype_enrichment_pipeline.out
+#$ -e /wynton/group/capra/projects/pan_3d_genome/data/phenotype_enrichment/ppn_ptr_divergent_windows_phenotype_enrichment_pipeline.err
 #$ -l h_rt=48:00:00
 #$ -l mem_free=100G
-
 
 # load conda environment
 source ~/miniconda3/etc/profile.d/conda.sh
