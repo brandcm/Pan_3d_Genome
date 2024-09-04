@@ -22,3 +22,5 @@ This directory contains scripts needed to generate data used in the analysis not
 	>--input, the path to the input file
 
 - contact_frequencies_distribution.sh runs contact_frequencies_distribution.py on each of the 56 individuals included in the final analysis.
+
+- ppn_ptr_windows_species_difference_in_expression_randomization.sh runs ppn_ptr_windows_species_difference_in_expression_randomization.py to randomly sample 89 non-bonobo-chimpanzee divergent windows and calculates the median species difference in expression and mean number of tissues per gene per permutation.

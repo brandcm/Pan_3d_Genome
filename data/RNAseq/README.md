@@ -12,6 +12,8 @@ The subdirectories and files in this directory are described below.
 
 - adapters.fa contains Illumina adapter sequences that are trimmed from reads in the pipeline.
 
+- analysis/ contains files generated in the analysis notebook from read_counts/ used to analyze species differences in gene expression.
+
 - dag.pdf is a directed acyclic graph (DAG) of the pipeline.
 
 - fastqc_results/ contains the output fastqc files. 

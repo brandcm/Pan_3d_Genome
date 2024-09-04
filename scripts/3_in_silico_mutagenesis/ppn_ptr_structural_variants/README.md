@@ -1,0 +1,3 @@
+This directory contains scripts to complete *in silico* mutagenesis of bonobo- and chimpanzee-specific inversions. I copied the basenji/ directory from the above directory here to run this script but have excluded it in this repo.
+
+- in_silico_mutagenesis_ppn_ptr_inversions.sh uses in_silico_mutagenesis_ppn_ptr_inversions.py to complete *in silico* mutagenesis of inversions. This script generates a summary file per inversion and outputs the predicted contact map.

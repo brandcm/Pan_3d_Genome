@@ -10,6 +10,8 @@ This directory contains scripts to retrieve annotation data for this project. As
 
 - retrieve_panTro6_phastCons_elements.sh downloads, reformats, and converts coordinates for phastCons conserved elements called in a 30-way vertebrate multiple species alignment. The resulting output files should be placed in the data/annotations folder.
 
+- retrieve_Pan_inversions.sh downloads, reformats, and converts coordinates for bonobo- and chimpanzee-specific inversions from Porubsky et al. 2020, which are identified using merge_strandSeq_intervals.py. The resulting output files are placed in the data/ppn_ptr_structural_variants folder. I manually edited these outputs files to further include inversions identified in Mao et al. 2021.
+
 &nbsp;
 
 Chain Files:
